@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0612">
+<title>五周年快乐 · 我们的五年</title>
+<meta name="description" content="我最可爱美丽的公主，五周年快乐呀！想和你在一起，每一天，每一年。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 28C13 24 3 18 3 10C3 5 6 3 10 3C13 3 15 5 16 8C17 5 19 3 22 3C26 3 29 5 29 10C29 18 19 24 16 28Z' fill='%23ffd591'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<canvas id="dust" aria-hidden="true"></canvas>
+<div class="aurora" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="hud">
+  <div class="brand"><span class="brand-heart">♥</span> 我们的五年</div>
+  <nav class="hud-actions">
+    <button id="btn-letter" class="glass chip" type="button">贺卡</button>
+    <button id="btn-full" class="glass icon" type="button" title="全屏" aria-label="全屏">⤢</button>
+  </nav>
+</header>
+
+<main id="stage" aria-label="心形照片墙：拖动探索，滚轮缩放，点击照片查看大图">
+  <div id="world"></div>
+</main>
+
+<div class="core" id="core" aria-hidden="true"><i></i><b></b></div>
+
+<p class="hint" id="hint"><span>拖动探索</span><i>·</i><span>滚轮缩放</span><i>·</i><span>点击看大图</span></p>
+
+<div class="toolbar" id="toolbar">
+  <button id="btn-replay" class="glass tool" type="button" title="重播入场"><i>↺</i><span>重播</span></button>
+  <button id="btn-zoom" class="glass tool" type="button" title="放大心形"><i>＋</i><span>放大</span></button>
+  <button id="btn-burst" class="glass tool" type="button" title="撒一把心"><i>♡</i><span>撒心</span></button>
+  <button id="btn-finale" class="glass tool primary" type="button" title="让所有照片聚成一朵烟花"><i>✦</i><span>绽放</span></button>
+</div>
+
+<!-- 开场贺卡 -->
+<section class="intro" id="intro" aria-label="贺卡">
+  <div class="intro-card">
+    <p class="eyebrow">F I V E &nbsp; Y E A R S</p>
+    <h1 class="title">
+      <span class="line l1">我最可爱美丽的<em>公主</em></span>
+      <span class="line l2">五周年快乐呀！</span>
+    </h1>
+    <p class="sub">
+      <span class="line l3">想和你在一起，</span>
+      <span class="line l4">每一天，每一年 <span class="emo">ヾ(≧▽≦*)o</span></span>
+    </p>
+    <button class="enter" id="btn-enter" type="button">
+      <span>点亮我们的五年</span><i>✦</i>
+    </button>
+    <p class="tip"><b id="intro-count">99</b> 张照片，会自己拼成一颗心</p>
+  </div>
+</section>
+
+<!-- 结尾：聚合坍塌后的烟花 -->
+<div class="music" id="music">
+  <button class="glass music-btn" id="btn-music" type="button" title="背景音乐" aria-label="背景音乐">
+    <span class="notes">♪</span>
+  </button>
+  <div class="music-panel" id="music-panel" hidden>
+    <p class="mp-title">我 们 的 歌 单</p>
+    <ul class="mp-list" id="mp-list"></ul>
+    <div class="mp-bar">
+      <button id="mp-toggle" type="button">暂停</button>
+      <span id="mp-now">未播放</span>
+    </div>
+  </div>
+</div>
+
+<div class="finale" id="finale" hidden>
+  <div class="finale-inner">
+    <p class="eyebrow">F I V E &nbsp; Y E A R S</p>
+    <h2 class="finale-title gold">五周年快乐</h2>
+    <p class="finale-sub">想和你在一起，每一天，每一年</p>
+    <button class="enter ghost" id="btn-again" type="button"><span>再看一次</span><i>↺</i></button>
+  </div>
+</div>
+
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<!-- 大图查看 -->
+<div class="lb" id="lb" hidden>
+  <div class="lb-top">
+    <span class="lb-count" id="lb-count"></span>
+    <div class="lb-tools">
+      <button class="lb-btn" id="lb-out" type="button" title="缩小" aria-label="缩小">−</button>
+      <button class="lb-btn" id="lb-in" type="button" title="放大" aria-label="放大">＋</button>
+      <button class="lb-btn wide" id="lb-reset" type="button" title="还原">1:1</button>
+      <button class="lb-btn" id="lb-close" type="button" title="关闭" aria-label="关闭">✕</button>
+    </div>
+  </div>
+  <div class="lb-viewport" id="lb-viewport">
+    <img class="lb-img" id="lb-img" alt="">
+    <div class="lb-loading" id="lb-loading" hidden><span></span></div>
+  </div>
+  <button class="lb-nav prev" id="lb-prev" type="button" aria-label="上一张">‹</button>
+  <button class="lb-nav next" id="lb-next" type="button" aria-label="下一张">›</button>
+  <div class="lb-foot">
+    <span class="lb-date" id="lb-date"></span>
+    <span class="lb-tip">双击 / 滚轮放大 · ← → 切换 · Esc 关闭</span>
+  </div>
+</div>
+
+<script src="data/photos.js"></script>
+<script src="fireworks.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
